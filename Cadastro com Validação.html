@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>   
+        :root{
+            --color-white: #fff;
+            --color-red: #e63636;
+            --color-dark1: #181818;
+            --color-dark2: #1e1e1e;
+            --color--purple1: #9333ff;
+            --color--purple2: indigo;
+        }
+
+        *{
+            margin: 0;
+            padding: 0;
+        }
+
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: var(--color-dark1);
+            color: var(--color-white);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .content{
+            background-color: var(--color-dark2);
+            padding:2rem; /*1rem = 16px*/
+            border-radius: 10px;
+            min-width: 30%; /*Ocupa uma largura mínima de 30% da página*/
+            overflow: auto; /*Quando a web acha que é necessairo ela alica um scroll na página para rolagem*/
+        }
+        h1{
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .content form{
+            display: flex; /*Elementos html ficam mais flexíveis e mais fáceis de estilizar e organizar*/
+            flex-direction: column;
+            gap: 1rem; /*Coloca espaço entre os elementos(linhas)*/
+        }
+
+        .requerido-span{
+            display: none; /*Não vai aparecer esse spanzinho, quando validar ele em javaScript ele aparece*/
+            font-size: 12px;
+            margin: 3px 0 0 1px;
+            color: var(--color-red);
+        }
+        .inputs{
+            background-color: var(--color-dark1);
+            padding: 8px 5px; /*8px pra cima e baixo e 5px pra esquerda e pra direita*/
+            outline: none;
+            border-radius: 5px;
+            border: 2px solid var(--color-dark1);
+            color: var(--color-white);
+            width: 100%; /*Ocupa 100% do formulário, lembrando que ele está com padding*/
+            box-sizing: border-box; /*Considera as configurações acima dentro dos 100% então não fica torto*/
+            transition: .3s; /*deixa ao selecionar o input muito mais fluido a aplicação das configurações*/
+        }
+        .inputs:focus{
+            border-color: var(--color--purple1);
+        }
+        .box-select{
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            gap: 1rem;
+        }
+        button[type="submit"]{
+            padding: 1rem;
+            font-size: 1rem; /*16px*/
+            outline: none;
+            border: none;
+            border-radius: 5px;
+            margin-top: 1rem;
+            background-color: var(--color--purple2);
+            color: var(--color-white);
+            cursor: pointer;
+            transition: .3s; /*para aplicar as configurações acima*/
+        }
+
+        button[type="submit"]:hover{
+            background-color: var(--color--purple1);
+        }
+
+        /*Vai ficar analisando a tela*/
+        @media screen and (max-width: 576px){
+                .box-select{
+                    flex-direction: column;
+                    gap: 5px;
+                }
+        }
+
+    </style>
+    <title>Validação</title>
+</head>
+<body>
+    <div class="content">
+        <h1>Formulário 🔥</h1>
+        <form action="" id="form"> <!--Pra o navegador saber que é um formulário e futuramente poder mandar essas dados pro banco de dados-->
+            <div>
+                <input type="text" placeholder="Digite seu nome" class="inputs required" oninput="nameValidate()"><!--Duas classes aplicadas a ele-->
+                <span class="requerido-span">Nome deve ter no mínimo 3 caracteres</span>
+            </div>
+            <div>
+                <input type="email" placeholder="Digite seu melhor email" class="inputs required" oninput="emailValidate()">
+                <span class="requerido-span">Digite um email válido</span>
+            </div>
+            <div>
+                <input type="password" placeholder="Senha" class="inputs required" oninput="mainPasswordValidate()">
+                <span class="requerido-span">Digite uma senha com no mínimo 8 caracteres</span>
+            </div>
+            <div>
+                <input type="password" placeholder="Repita a sua senha" class="inputs required" oninput="comparePassword()">
+                <span class="requerido-span">Senhas devem ser compatíveis</span>
+            </div>
+
+            <!--25 colunas e 10 linhas-->
+            <textarea class="inputs" name="descricao" id="descricao" cols="25" rows="10" placeholder="Fale um pouco sobre você..."></textarea>
+
+            <p>Sexo:</p>
+            <div class="box-select">
+                <div>
+                    <input type="radio" id="m" value="m" name="sexo">
+                    <label for="m">Masculino</label>
+                </div>
+                <div>
+                    <input type="radio" id="f" value="f" name="sexo">
+                    <label for="f">Feminino</label>
+                </div>
+                <div>
+                    <input type="radio" id="o" value="o" name="sexo">
+                    <label for="o">Outro</label>
+                </div>
+                <!--A pagina só deixa selecionar um dos radios pois eles compartilham o mesmo "name", ou seja, estão se referindo ao mesmo assunto-->
+            </div>
+
+            <p>Quais suas experiências?</p>
+            <div class="box-select">
+                <div>
+                    <input type="checkbox" id="html" value="html" name="experiencias">
+                    <label for="html">Html</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="css" value="css" name="experiencias">
+                    <label for="css">Css</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="js" value="js" name="experiencias">
+                    <label for="js">JavaScript</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="php" value="php" name="experiencias">
+                    <label for="php">PHP</label>
+                </div>
+            </div>
+            <button type="submit">Enviar</button>
+
+        </form>
+    </div>  
+</body>
+
+<script>
+    const form   = document.getElementById("form");
+    const campos = document.querySelectorAll(".required");
+    const spans  = document.querySelectorAll(".requerido-span");
+    const emailRegex = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+    
+    //Fica escutando toda vez que esse formulário tiver um submit, (função anônima criada, colocando event de parâmetro), toda vez que clicar em enviar ele não envia se não estiver tudo preenchido
+    form.addEventListener('submit', (event) => {
+        event.preventDefault();//Não deixa o formulário ser enviado
+        nameValidate();
+        emailValidate();
+        mainPasswordValidate();
+        comparePassword();
+    });
+
+    function setError(index){
+        campos[index].style.border = '2px solid #e63636';
+        spans[index].style.display = 'block';
+    }
+    
+    function removeError(index){
+        campos[index].style.border = '';
+        spans[index].style.display = 'none';
+    }
+
+    function nameValidate(){
+        if(campos[0].value.length < 3){
+            setError(0);
+        }else{
+            removeError(0);
+        }
+    }
+    function emailValidate(){
+        if(!emailRegex.test(campos[1].value)){
+            setError(1);
+        }else{
+            removeError(1);
+        }
+    }
+    function mainPasswordValidate(){
+        if(campos[2].value.length < 8){
+            setError(2);
+        }else{
+            removeError(2);
+            comparePassword();
+        }
+    }
+    function comparePassword(){
+        if(campos[3].value == campos[2].value && campos[3].value.length >= 8){
+            removeError(3);
+        }else{
+            setError(3);
+        }
+    }
+</script>
+</html>
